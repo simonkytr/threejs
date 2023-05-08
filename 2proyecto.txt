@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>proyecto1.2</title>
+	<style>
+		body {
+			margin: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r119/three.min.js"></script>
+	<script src="inflate.min.js"></script>
+	<script src="FBXLoader.js"></script>
+	<script src="OrbitControls.js"></script>
+
+	<script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        
+        const ambientlight = new THREE.AmbientLight(0x978A09);
+          //scene.add(ambientlight)
+        //Luces playa
+
+        const lightP1 = new THREE.PointLight(0xFEDB16,2, 100);
+            lightP1.position.set(-10,40,-10);
+            scene.add( lightP1 );
+            lightP1.castShadow = true
+        const sphereSize1=1;
+        const pointLightHelper1 = new THREE.PointLightHelper( lightP1, sphereSize1 );
+         //scene.add( pointLightHelper1 );
+
+            //luz 2
+
+        
+            const lightP2 = new THREE.PointLight(0xDC430A,2, 200);
+            lightP2.position.set(-90,70,20);
+            scene.add( lightP2 );
+            lightP2.castShadow = true
+        const sphereSize2=1;
+        const pointLightHelper2 = new THREE.PointLightHelper( lightP2, sphereSize2 );
+            //scene.add( pointLightHelper2 );
+
+            //luz3
+            const lightP3 = new THREE.PointLight(0xE88AD8,2, 40);
+            lightP3.position.set(10,40,20);
+            scene.add( lightP3 );
+            lightP3.castShadow = true
+        const sphereSize3=1;
+        const pointLightHelper3 = new THREE.PointLightHelper( lightP3, sphereSize3 );
+          // scene.add( pointLightHelper3);
+
+               //luz4
+               const lightP4 = new THREE.PointLight(0xFFFFFF,2, 70);
+            lightP4.position.set(-10,40,-20);
+            scene.add( lightP4 );
+            lightP4.castShadow = true
+        const sphereSize4=1;
+        const pointLightHelper4 = new THREE.PointLightHelper( lightP4, sphereSize4 );
+           // scene.add( pointLightHelper4);
+
+
+
+            //////
+
+        const loader = new THREE.TextureLoader();
+        const loaderM = new THREE.FBXLoader();
+        loaderM.load('proyecto2.fbx',  function (object) {
+            object.traverse(function (child) {
+               
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    console.log(child.name)
+                    if (child.name == "piso")
+                        child.material = new THREE.MeshPhongMaterial(
+                            {
+                                map: loader.load('rosa.jpg'),
+                                normalMap: loader.load('noormalroca.jpg'),
+                            }
+                        )
+                    child.material.skinning = true;
+                }
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    console.log(child.name)
+                    if (child.name == "nieve")
+                        child.material = new THREE.MeshPhongMaterial(
+                            {
+                                map: loader.load('nieve.jpg'),
+                                normalMap: loader.load('noormalroca.jpg'),
+                            }
+                        )
+                    child.material.skinning = true;
+                }
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    console.log(child.name)
+                    if (child.name == "paleta2")
+                        child.material = new THREE.MeshPhongMaterial(
+                            {
+                                map: loader.load('paleta.jpg'),
+                                normalMap: loader.load('nubenormal.jpg'),
+                            }
+                        )
+                    child.material.skinning = true;
+                }
+           
+                
+            });
+            
+            scene.add(object);
+
+            
+        });
+    
+        loaderM.load('alien.fbx',  function (object1) {
+            object1.traverse(function (child) {
+               
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    console.log(child.name)
+                    if (child.name == "nube")
+                        child.material = new THREE.MeshPhongMaterial(
+                            {
+                                map: loader.load('nube.jpg'),
+                                normalMap: loader.load('nubenormal.jpg'),
+                            }
+                        )
+                    child.material.skinning = true;
+                }
+                scene.add(object1);
+            });
+        })
+        
+        
+        camera.position.z = 5;
+        controls.update();
+        renderer.render(scene, camera);
+        const animate = function () {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        };
+        animate();
+    </script>
+</body>
+</html>
